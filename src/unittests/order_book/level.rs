@@ -110,4 +110,3 @@ fn test_level_remove() {
     assert_eq!(status.status, None);
     assert_eq!(level1.get_num_orders(), 0);
 }
-

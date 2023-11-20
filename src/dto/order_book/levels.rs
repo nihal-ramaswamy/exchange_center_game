@@ -12,12 +12,13 @@ use super::level::Level;
 
 #[derive(Clone, Default)]
 pub struct Levels {
-pub level: BTreeMap<i32, Level>
+    pub level: BTreeMap<i32, Level>
 }
 
 impl Levels {
-    pub fn new(price: i32, level: Level) -> Self {
+    pub fn new(level: Level) -> Self {
         let mut new_level: BTreeMap<i32, Level> = BTreeMap::new();
+        let price = level.price;
         new_level.insert(price, level);
         Levels { level: new_level }
     }
@@ -46,7 +47,7 @@ impl Levels {
         let level = self.level.get_mut(&price);
         
         match level {
-            None => Status::new(order_core, Some(RejectReasons::Unknown)),
+            None => Status::new(order_core, Some(RejectReasons::OrderNotFound)),
             Some(level) => level.remove(order_core)
         }
 

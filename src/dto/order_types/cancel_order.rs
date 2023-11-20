@@ -7,6 +7,7 @@ use crate::{
     utils::order::get_side_from_bool
 };
 
+#[derive(Debug, Clone)]
 pub struct CancelOrder {
     pub order_core: OrderCore,
     pub side: Side

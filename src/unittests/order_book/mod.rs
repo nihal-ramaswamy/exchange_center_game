@@ -3,3 +3,6 @@ pub mod level;
 
 #[cfg(test)]
 pub mod levels;
+
+#[cfg(test)]
+pub mod book;
