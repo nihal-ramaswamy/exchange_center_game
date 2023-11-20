@@ -1,6 +1,16 @@
 use std::collections::BTreeMap;
 
-use crate::dto::{order_helper::order_core::OrderCore, order_types::{new_order::NewOrder, cancel_order::CancelOrder}, order_book::{level::Level, levels::Levels}, reject::reject_reasons::RejectReasons};
+use crate::dto::{
+    order_helper::order_core::OrderCore, 
+    order_types::{new_order::NewOrder, 
+        cancel_order::CancelOrder
+    }, 
+    order_book::{
+        level::Level, 
+        levels::Levels
+    }, 
+    reject::reject_reasons::RejectReasons
+};
 
 #[test]
 fn test_levels_exists() {

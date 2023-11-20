@@ -10,7 +10,7 @@ use crate::dto::{
 
 use super::level::Level;
 
-#[derive(Clone, Default)]
+#[derive(Clone, Default, Debug)]
 pub struct Levels {
     pub level: BTreeMap<i32, Level>
 }

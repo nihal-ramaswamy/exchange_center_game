@@ -26,7 +26,7 @@ impl Level {
     pub fn insert(&mut self, order: NewOrder) -> Status {
         if self.price != order.price {
             Status::new(order.order_core, Some(RejectReasons::PriceMisMatch)) 
-        } else if self.get_side() != Side::Unknown && self.get_side() != order.side {
+        } else if self.get_side() != order.side {
             Status::new(order.order_core, Some(RejectReasons::SideMisMatch))
         } else {
             let order_entry = OrderBookEntry::new(order.clone());
@@ -36,7 +36,8 @@ impl Level {
     }
 
     pub fn remove(&mut self, order_core: OrderCore) -> Status {
-        if let Some(pos) = self.order_entries.iter().position(|x| x.order.order_core == order_core) {
+        if let Some(pos) = self.order_entries.iter()
+                            .position(|x| x.order.order_core == order_core) {
             self.order_entries.remove(pos);
             Status::new(order_core, None)
         } else {

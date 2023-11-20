@@ -5,11 +5,13 @@ use crate::dto::{
         modify_order::ModifyOrder,
         cancel_order::CancelOrder
     }, 
-    order_helper::side::Side, status::response_status::Status, reject::reject_reasons::RejectReasons
+    order_helper::side::Side, 
+    status::response_status::Status,
+    reject::reject_reasons::RejectReasons
 };
 use crate::dto::order_book::levels::Levels;
 
-
+#[derive(Debug, Default)]
 pub struct OrderBook {
     pub security: String,   
     pub ask_levels: Levels,
@@ -28,18 +30,29 @@ impl OrderBook {
         }
     }
 
-    pub fn modify_order(&mut self, order: ModifyOrder) {
+    pub fn modify_order(&mut self, order: ModifyOrder) -> Vec<Status> {
         let side = self.orders.get(&order.order_core.order_id).map(|x| x.side);
         
-        self.cancel_order(CancelOrder::new(order.clone().order_core, side.unwrap() == Side::Bid));
-        self.add_order(NewOrder::from_modify_order(order));
+        let mut vec_status: Vec<Status> = Vec::new();
+
+        let status_cancel = self.cancel_order(
+            CancelOrder::new(
+                order.clone().order_core, side.unwrap() == Side::Bid));
+        let status_add = self.add_order(NewOrder::from_modify_order(order));
+
+        vec_status.push(status_cancel);
+        vec_status.push(status_add);
+
+        vec_status
     }
 
     pub fn cancel_order(&mut self, order: CancelOrder) -> Status {
-        let price = self.orders.get(&order.order_core.order_id).map(|x| x.price);
+        let price = self.orders.get(&order.order_core.order_id)
+                                .map(|x| x.price);
 
         if price.is_none() {
-            return Status::new(order.order_core, Some(RejectReasons::OrderNotFound));
+            return Status::new(order.order_core, 
+                               Some(RejectReasons::OrderNotFound));
         }
 
         match order.side {

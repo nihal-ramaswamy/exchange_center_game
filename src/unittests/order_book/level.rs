@@ -1,6 +1,14 @@
 use std::cmp::Ordering;
 
-use crate::dto::{order_types::new_order::NewOrder, order_helper::{order_core::OrderCore, side::Side}, order_book::level::Level, reject::reject_reasons::RejectReasons};
+use crate::dto::{
+    order_types::new_order::NewOrder, 
+    order_helper::{
+        order_core::OrderCore, 
+        side::Side
+    }, 
+    order_book::level::Level, 
+    reject::reject_reasons::RejectReasons
+};
 
 #[test]
 fn test_level_equality_when_price_equal() {
@@ -101,7 +109,9 @@ fn test_level_remove() {
     let new_order1 = NewOrder::new(OrderCore::default(), 1, 1, true);
     let mut level1 = Level::new(new_order1);
 
-    let order_core1 = OrderCore::new("test".to_string(), "test".to_string(), "test".to_string());
+    let order_core1 = OrderCore::new("test".to_string(), 
+                                     "test".to_string(),
+                                     "test".to_string());
     let status = level1.remove(order_core1);
     assert_eq!(status.status, Some(RejectReasons::OrderNotFound));
 
