@@ -4,3 +4,4 @@ pub mod order_helper;
 pub mod reject;
 pub mod status;
 pub mod traits;
+pub mod matching_engine;

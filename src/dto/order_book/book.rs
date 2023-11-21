@@ -7,7 +7,7 @@ use crate::dto::{
     }, 
     order_helper::side::Side, 
     status::response_status::Status,
-    reject::reject_reasons::RejectReasons
+    reject::reject_reasons::RejectReasons, traits::r#match::Match
 };
 use crate::dto::order_book::levels::Levels;
 
@@ -83,7 +83,7 @@ impl OrderBook {
 
 
 impl OrderBook {
-    pub fn r#match() {
-
+    pub fn r#match<M: Match>(&mut self, matching_engine: M) -> Vec<Status> {
+        matching_engine.r#match(&mut self.ask_levels, &mut self.bid_levels)
     }
 }
