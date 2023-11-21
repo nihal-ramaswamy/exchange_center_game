@@ -1,4 +1,4 @@
-use std::cmp::Ordering;
+use std::{cmp::Ordering, collections::VecDeque};
 
 use crate::dto::{
     order_types::new_order::NewOrder, 
@@ -119,4 +119,15 @@ fn test_level_remove() {
     let status = level1.remove(order_core1);
     assert_eq!(status.status, None);
     assert_eq!(level1.get_num_orders(), 0);
+}
+
+#[test]
+fn test_levels_front() {
+    let new_order = NewOrder::new(OrderCore::default(), 1, 1, true);
+    let level = Level::new(new_order.clone());
+    assert_eq!(level.get_front_order(), Some(new_order));
+
+
+    let level = Level {price: 1, order_entries: VecDeque::new()};
+    assert_eq!(level.get_front_order(), None);
 }

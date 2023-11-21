@@ -42,13 +42,24 @@ impl Levels {
         }
     }
 
+    fn clean(&mut self, price: i32) {
+        if self.level.get_mut(&price).unwrap().get_num_orders() == 0 {
+            self.level.remove(&price);
+        }
+    }
+    
+    /// This removes the level from the map if there are no more orders on that level
     pub fn remove_order(&mut self, order: CancelOrder, price: i32) -> Status {
         let order_core = order.order_core;
         let level = self.level.get_mut(&price);
         
         match level {
             None => Status::new(order_core, Some(RejectReasons::OrderNotFound)),
-            Some(level) => level.remove(order_core)
+            Some(level) => {
+                let status = level.remove(order_core);
+                self.clean(price);
+                status
+            }
         }
 
     }

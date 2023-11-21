@@ -1,5 +1,3 @@
-use std::collections::BTreeMap;
-
 use crate::dto::{
     order_helper::order_core::OrderCore, 
     order_types::{new_order::NewOrder, 
@@ -70,10 +68,6 @@ fn test_levels_front() {
     assert_eq!(front, Some(level));
 
     levels.remove_order(CancelOrder::new(order_core, true), 10);
-    let front = levels.front();
-    assert_ne!(front, None);
-
-    let levels = Levels {level: BTreeMap::new()};
     let front = levels.front();
     assert_eq!(front, None);
 }

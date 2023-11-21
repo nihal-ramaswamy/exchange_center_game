@@ -59,6 +59,14 @@ impl Level {
     pub fn get_order_entries(&self) -> VecDeque<OrderBookEntry> {
         self.order_entries.clone()
     }
+    
+    pub fn get_front_order(&self) -> Option<NewOrder> {
+        match self.get_num_orders() {
+            0 => None,
+            _ => Some(self.get_order_entries().front().unwrap().order.clone())
+
+        }
+    }
 }
 
 impl PartialEq for Level {

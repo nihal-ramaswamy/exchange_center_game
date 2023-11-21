@@ -6,7 +6,7 @@ use crate::dto::{
         cancel_order::CancelOrder
     }, 
     order_helper::side::Side, 
-    status::response_status::Status,
+    status::{response_status::Status, trade_status::TradeStatus},
     reject::reject_reasons::RejectReasons, traits::r#match::Match
 };
 use crate::dto::order_book::levels::Levels;
@@ -55,6 +55,8 @@ impl OrderBook {
                                Some(RejectReasons::OrderNotFound));
         }
 
+        self.orders.remove(&order.order_core.order_id);
+
         match order.side {
             Side::Bid => self.bid_levels.remove_order(order, price.unwrap()),
             Side::Ask => self.bid_levels.remove_order(order, price.unwrap()),
@@ -83,7 +85,7 @@ impl OrderBook {
 
 
 impl OrderBook {
-    pub fn r#match<M: Match>(&mut self, matching_engine: M) -> Vec<Status> {
-        matching_engine.r#match(&mut self.ask_levels, &mut self.bid_levels)
+    pub fn r#match<M: Match>(&mut self) -> Vec<TradeStatus> {
+        M::r#match(&mut self.ask_levels, &mut self.bid_levels)
     }
 }
