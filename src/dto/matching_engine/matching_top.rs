@@ -13,7 +13,9 @@ pub struct MatchingTop {
 }
 
 impl Match for MatchingTop {
-    fn r#match(ask_levels: Levels, bid_levels: Levels) -> (Levels, Levels, Vec<TradeStatus>) {
+    fn r#match(ask_levels: Levels, bid_levels: Levels) 
+        -> (Levels, Levels, Vec<TradeStatus>) {
+
         let mut ask_levels = ask_levels;
         let mut bid_levels = bid_levels;
 
