@@ -86,6 +86,10 @@ impl OrderBook {
 
 impl OrderBook {
     pub fn r#match<M: Match>(&mut self) -> Vec<TradeStatus> {
-        M::r#match(&mut self.ask_levels, &mut self.bid_levels)
+        let statuses: Vec<TradeStatus>;
+
+        (self.ask_levels, self.bid_levels, statuses) = 
+            M::r#match(self.ask_levels.clone(), self.bid_levels.clone());
+        statuses
     }
 }
