@@ -1,4 +1,15 @@
-use crate::dto::{order_book::{book::OrderBook, level::Level}, order_types::new_order::NewOrder, order_helper::{order_core::OrderCore, side::Side}, matching_engine::matching_top::MatchingTop};
+use crate::dto::{
+    order_book::{
+        book::OrderBook, 
+        level::Level
+    }, 
+    order_types::new_order::NewOrder, 
+    order_helper::{
+        order_core::OrderCore, 
+        side::Side
+    }, 
+    matching_engine::matching_top::MatchingTop
+};
 
 #[test]
 fn test_matching_top_same_quantity_same_price_one_order() {
@@ -42,7 +53,8 @@ fn test_matching_top_diff_quantity_same_price_one_order_buy_none() {
     assert_eq!(status.price, 10);
 
 
-    let expected_ask_level = Level::new(NewOrder::new(OrderCore::default(), 10, 5, false));
+    let expected_ask_level = Level::new(NewOrder::new(
+            OrderCore::default(), 10, 5, false));
     assert_eq!(book.ask_levels.front(Side::Ask), Some(expected_ask_level));
     assert_eq!(book.bid_levels.front(Side::Bid), None);
 }
@@ -67,7 +79,8 @@ fn test_matching_top_diff_quantity_same_price_one_order_ask_none() {
     assert_eq!(status.price, 10);
 
 
-    let expected_bid_level = Level::new(NewOrder::new(OrderCore::default(), 10, 5, true));
+    let expected_bid_level = Level::new(NewOrder::new(
+            OrderCore::default(), 10, 5, true));
     assert_eq!(book.bid_levels.front(Side::Bid), Some(expected_bid_level));
     assert_eq!(book.ask_levels.front(Side::Ask), None);
 }
@@ -252,4 +265,51 @@ fn test_matching_top_bid_satisfied_by_two_asks_with_leftovers() {
 
 }
 
+#[test]
+fn test_matching_top_multiple_trades() {
+    let security_id = "NFLX".into();
 
+    let mut book = OrderBook::new(security_id);
+
+    let bid_price_quantity: Vec<(i32, u32)> = vec![(13, 4), (12, 3), (10, 6)];
+    let ask_price_quantity: Vec<(i32, u32)> = vec![(12, 5), (13, 1)];
+
+    for (price, quantity) in bid_price_quantity.into_iter() {
+        let order = NewOrder::new(OrderCore::default(), price, quantity, true);
+        book.add_order(order);
+    }
+
+    for (price, quantity) in ask_price_quantity.into_iter() {
+        let order = NewOrder::new(OrderCore::default(), price, quantity, false);
+        book.add_order(order);
+    }
+
+    let status = book.r#match::<MatchingTop>();
+
+    assert_eq!(status.len(), 2);
+
+    let bid_front = book.bid_levels.front(Side::Bid).unwrap()
+        .get_front_order().unwrap();
+    let ask_front = book.ask_levels.front(Side::Ask).unwrap()
+        .get_front_order().unwrap();
+
+    let expected_bid_front = NewOrder {
+        price: 12,
+        order_core: OrderCore::default(),
+        initial_quantity: 3,
+        current_quantity: 2,
+        side: Side::Bid
+    };
+
+    let expected_ask_front = NewOrder {
+        price: 13,
+        order_core: OrderCore::default(),
+        initial_quantity: 1,
+        current_quantity: 1,
+        side: Side::Ask
+    };
+
+    assert_eq!(bid_front, expected_bid_front);
+    assert_eq!(ask_front, expected_ask_front);
+
+}
