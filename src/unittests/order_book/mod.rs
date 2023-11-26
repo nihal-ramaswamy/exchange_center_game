@@ -5,4 +5,4 @@ pub mod level;
 pub mod levels;
 
 #[cfg(test)]
-pub mod book;
+pub mod symbol_book;

@@ -1,6 +1,6 @@
 use crate::dto::{
     order_book::{
-        book::OrderBook, 
+        symbol_book::SymbolBook, 
         level::Level
     }, 
     order_types::new_order::NewOrder, 
@@ -14,7 +14,7 @@ use crate::dto::{
 #[test]
 fn test_matching_top_same_quantity_same_price_one_order() {
     let security_id = "NFLX".into();
-    let mut book = OrderBook::new(security_id);
+    let mut book = SymbolBook::new(security_id);
 
     let order1 = NewOrder::new(OrderCore::default(), 10, 10, true);
     let order2 = NewOrder::new(OrderCore::default(), 10, 10, false);
@@ -36,7 +36,7 @@ fn test_matching_top_same_quantity_same_price_one_order() {
 #[test]
 fn test_matching_top_diff_quantity_same_price_one_order_buy_none() {
     let security_id = "NFLX".into();
-    let mut book = OrderBook::new(security_id);
+    let mut book = SymbolBook::new(security_id);
 
     let order1 = NewOrder::new(OrderCore::default(), 10, 5, true);
     let order2 = NewOrder::new(OrderCore::default(), 10, 10, false);
@@ -62,7 +62,7 @@ fn test_matching_top_diff_quantity_same_price_one_order_buy_none() {
 #[test]
 fn test_matching_top_diff_quantity_same_price_one_order_ask_none() {
     let security_id = "NFLX".into();
-    let mut book = OrderBook::new(security_id);
+    let mut book = SymbolBook::new(security_id);
 
     let order1 = NewOrder::new(OrderCore::default(), 10, 5, false);
     let order2 = NewOrder::new(OrderCore::default(), 10, 10, true);
@@ -89,7 +89,7 @@ fn test_matching_top_diff_quantity_same_price_one_order_ask_none() {
 fn test_matching_top_no_trades() {
     let security_id = "NFLX".into();
 
-    let mut book = OrderBook::new(security_id);
+    let mut book = SymbolBook::new(security_id);
 
     let order1 = NewOrder::new(OrderCore::default(), 11, 10, false);
     let order2 = NewOrder::new(OrderCore::default(), 10, 10, true);
@@ -107,7 +107,7 @@ fn test_matching_top_no_trades() {
 fn test_matching_top_ask_lower_bid_higher() {
     let security_id = "NFLX".into();
 
-    let mut book = OrderBook::new(security_id);
+    let mut book = SymbolBook::new(security_id);
 
     let order1 = NewOrder::new(OrderCore::default(), 9, 10, false);
     let order2 = NewOrder::new(OrderCore::default(), 10, 10, true);
@@ -133,7 +133,7 @@ fn test_matching_top_ask_lower_bid_higher() {
 fn test_matching_top_ask_satisfied_by_two_bids() {
     let security_id = "NFLX".into();
 
-    let mut book = OrderBook::new(security_id);
+    let mut book = SymbolBook::new(security_id);
 
     let order1 = NewOrder::new(OrderCore::default(), 10, 10, false);
     let order2 = NewOrder::new(OrderCore::default(), 11, 4, true);
@@ -163,7 +163,7 @@ fn test_matching_top_ask_satisfied_by_two_bids() {
 fn test_matching_top_bid_satisfied_by_two_asks() {
     let security_id = "NFLX".into();
 
-    let mut book = OrderBook::new(security_id);
+    let mut book = SymbolBook::new(security_id);
 
     let order1 = NewOrder::new(OrderCore::default(), 10, 10, true);
     let order2 = NewOrder::new(OrderCore::default(), 5, 4, false);
@@ -193,7 +193,7 @@ fn test_matching_top_bid_satisfied_by_two_asks() {
 fn test_matching_top_ask_satisfied_by_two_bids_with_leftovers() {
     let security_id = "NFLX".into();
 
-    let mut book = OrderBook::new(security_id);
+    let mut book = SymbolBook::new(security_id);
 
     let order1 = NewOrder::new(OrderCore::default(), 10, 11, false);
     let order2 = NewOrder::new(OrderCore::default(), 11, 4, true);
@@ -231,7 +231,7 @@ fn test_matching_top_ask_satisfied_by_two_bids_with_leftovers() {
 fn test_matching_top_bid_satisfied_by_two_asks_with_leftovers() {
     let security_id = "NFLX".into();
 
-    let mut book = OrderBook::new(security_id);
+    let mut book = SymbolBook::new(security_id);
 
     let order1 = NewOrder::new(OrderCore::default(), 10, 11, true);
     let order2 = NewOrder::new(OrderCore::default(), 5, 4, false);
@@ -269,7 +269,7 @@ fn test_matching_top_bid_satisfied_by_two_asks_with_leftovers() {
 fn test_matching_top_multiple_trades() {
     let security_id = "NFLX".into();
 
-    let mut book = OrderBook::new(security_id);
+    let mut book = SymbolBook::new(security_id);
 
     let bid_price_quantity: Vec<(i32, u32)> = vec![(13, 4), (12, 3), (10, 6)];
     let ask_price_quantity: Vec<(i32, u32)> = vec![(12, 5), (13, 1)];

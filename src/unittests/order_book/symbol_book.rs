@@ -1,5 +1,5 @@
 use crate::dto::{
-    order_book::book::OrderBook, 
+    order_book::symbol_book::SymbolBook, 
     order_types::{
         new_order::NewOrder, 
         cancel_order::CancelOrder, 
@@ -13,7 +13,7 @@ use crate::dto::{
 
 #[test]
 fn test_spread() {
-    let mut book = OrderBook::default();
+    let mut book = SymbolBook::default();
 
     let one = "1".to_string();
     let two = "2".to_string();
@@ -29,7 +29,7 @@ fn test_spread() {
     let spread = book.get_spread();
     assert_eq!(spread.unwrap(), 1);
 
-    let mut book = OrderBook::default();
+    let mut book = SymbolBook::default();
     book.add_order(new_order_sell);
 
     let spread = book.get_spread();
@@ -39,7 +39,7 @@ fn test_spread() {
 #[test]
 #[should_panic]
 fn test_add_order_unknown_side() {
-    let mut book = OrderBook::default();
+    let mut book = SymbolBook::default();
     let new_order = NewOrder {
                         order_core: OrderCore::default(), 
                         price: 10, 
@@ -54,7 +54,7 @@ fn test_add_order_unknown_side() {
 #[test]
 #[should_panic]
 fn test_cancel_order_unknown_side() {
-    let mut book = OrderBook::default();
+    let mut book = SymbolBook::default();
     let new_order = NewOrder {
                         order_core: OrderCore::default(), 
                         price: 10, 
@@ -72,7 +72,7 @@ fn test_cancel_order_unknown_side() {
 
 #[test]
 fn test_modify_order() {
-    let mut book = OrderBook::default();
+    let mut book = SymbolBook::default();
     let new_order_buy = NewOrder::new(OrderCore::default(), 11, 10, true);
     
     book.add_order(new_order_buy);
