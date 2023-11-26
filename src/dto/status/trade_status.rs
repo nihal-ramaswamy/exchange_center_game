@@ -1,8 +1,9 @@
 use chrono::{DateTime, Local};
-
+use rocket::serde::Serialize;
 use crate::dto::order_helper::order_core::OrderCore;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
+#[serde(crate = "rocket::serde")]
 pub struct TradeStatus {
     pub buy_trade: OrderCore,
     pub sell_trade: OrderCore,

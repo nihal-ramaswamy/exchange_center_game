@@ -6,9 +6,9 @@ use crate::dto::{
         new_order::NewOrder, 
         cancel_order::CancelOrder, modify_order::ModifyOrder
     }, 
-    status::response_status::Status, 
+    status::{response_status::Status, trade_status::TradeStatus}, 
     reject::reject_reasons::RejectReasons, 
-    order_helper::order_core::OrderCore
+    order_helper::order_core::OrderCore, matching_engine::matching_top::MatchingTop
 };
 
 use super::levels::Levels;
@@ -77,6 +77,31 @@ impl OrderBook {
             None => Err(Status::new(OrderCore::default(), Some(RejectReasons::SymbolNotFound))),
             Some(book) => Ok(book.get_spread())
         }
+    }
 
+    fn get_security_ids(&self) -> Vec<String>  {
+        self.book.keys().cloned().collect()
+    }
+
+    pub fn get_trades(&mut self) -> Vec<TradeStatus> {
+        let security_ids = self.get_security_ids();
+
+        let mut statuses: Vec<TradeStatus> = Vec::new();
+
+        for security_id in security_ids {
+            let symbol_book = self.book.get_mut(&security_id);
+
+            match symbol_book {
+                None => continue,
+                Some(book) => {
+                    let statuses_for_symbol = book.r#match::<MatchingTop>();
+                    for status in statuses_for_symbol {
+                        statuses.push(status);
+                    }
+                }
+            }
+        }
+
+        statuses
     }
 }

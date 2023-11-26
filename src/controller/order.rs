@@ -1,4 +1,6 @@
+use rocket::response::stream::{Event, EventStream};
 use rocket::serde::json::Json;
+use rocket::tokio::time::{self, Duration};
 
 use crate::dto::order_book::levels::Levels;
 use crate::dto::order_types::cancel_order::CancelOrder;
@@ -38,4 +40,25 @@ pub fn get_bid_orders(security_id: String) -> Json<Option<Levels>> {
 #[get("/spread/<security_id>")]
 pub fn get_spread(security_id: String) -> Json<Result<Option<i32>, Status>> {
     Json(order::get_spread(security_id))
+}
+
+/// Trades get executed every 1 nanosecond
+/// Heartbeat sent out every 1 second
+#[get("/trades")]
+pub fn get_trades() -> EventStream![] {
+    let event_stream = rocket::futures::stream::pending();
+    EventStream::from(event_stream).heartbeat(None);
+
+    let event_stream = rocket::futures::stream::pending();
+    EventStream::from(event_stream).heartbeat(Duration::from_secs(1));
+
+    let stream = EventStream! {
+        let mut interval = time::interval(Duration::from_nanos(1));
+        loop {
+            yield Event::json(&order::get_trades());
+            interval.tick().await;
+        }
+    };
+
+    stream.heartbeat(Duration::from_secs(1))
 }

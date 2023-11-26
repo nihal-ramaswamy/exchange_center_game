@@ -12,7 +12,10 @@ use crate::dto::{
         cancel_order::CancelOrder, 
         modify_order::ModifyOrder
     }, 
-    status::response_status::Status
+    status::{
+        response_status::Status, 
+        trade_status::TradeStatus
+    }
 };
 
 lazy_static! {
@@ -47,4 +50,9 @@ pub fn get_bid_orders(security_id: String) -> Option<Levels> {
 pub fn get_spread(security_id: String) -> Result<Option<i32>, Status> {
     let order_book = ORDER_BOOK.lock().unwrap();
     order_book.get_spread(security_id)
+}
+
+pub fn get_trades() -> Vec<TradeStatus> {
+    let mut order_book = ORDER_BOOK.lock().unwrap();
+    order_book.get_trades()
 }

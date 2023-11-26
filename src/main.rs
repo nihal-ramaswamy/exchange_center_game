@@ -6,7 +6,8 @@ use controller::order::{
     cancel_order,
     get_bid_orders,
     get_ask_orders,
-    get_spread
+    get_spread,
+    get_trades
 };
 
 use crate::controller::healthcheck;
@@ -27,5 +28,7 @@ fn rocket() -> _ {
                cancel_order, 
                get_ask_orders, 
                get_bid_orders, 
-               get_spread])
+               get_spread,
+               get_trades
+        ])
 }
