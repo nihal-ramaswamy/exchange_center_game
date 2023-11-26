@@ -1,3 +1,4 @@
+use rocket::serde::Serialize;
 use std::collections::BTreeMap;
 
 use crate::dto::{
@@ -5,12 +6,15 @@ use crate::dto::{
         new_order::NewOrder,
         cancel_order::CancelOrder
     }, 
-    reject::reject_reasons::RejectReasons, status::response_status::Status, order_helper::side::Side
+    reject::reject_reasons::RejectReasons, 
+    status::response_status::Status, 
+    order_helper::side::Side
 };
 
 use super::level::Level;
 
-#[derive(Clone, Default, Debug)]
+#[derive(Clone, Default, Debug, Serialize)]
+#[serde(crate = "rocket::serde")]
 pub struct Levels {
     pub level: BTreeMap<i32, Level>
 }

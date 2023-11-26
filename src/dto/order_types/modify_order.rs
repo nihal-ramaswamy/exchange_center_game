@@ -1,3 +1,5 @@
+use rocket::serde::Deserialize;
+
 use crate::{
     dto::{
         order_helper::{
@@ -8,6 +10,8 @@ use crate::{
 };
 
 #[derive(Clone)]
+#[derive(Deserialize)]
+#[serde(crate = "rocket::serde")]
 pub struct ModifyOrder {
     pub order_core: OrderCore,
     pub price: i32,

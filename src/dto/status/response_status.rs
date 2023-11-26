@@ -1,8 +1,12 @@
+use rocket::serde::Serialize;
+
 use crate::dto::{
     order_helper::order_core::OrderCore, 
     reject::reject_reasons::RejectReasons
 };
 
+#[derive(Serialize)]
+#[serde(crate = "rocket::serde")]
 pub struct Status {
     pub order_core: OrderCore,
     pub status: Option<RejectReasons>

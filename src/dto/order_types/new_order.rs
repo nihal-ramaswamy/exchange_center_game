@@ -1,5 +1,5 @@
 use std::cmp::Ordering;
-
+use rocket::serde::{Deserialize, Serialize};
 use crate::{
     dto::{
         order_helper::{
@@ -14,6 +14,8 @@ use crate::{
 use super::modify_order::ModifyOrder;
 
 #[derive(Clone, Debug, Eq)]
+#[derive(Deserialize, Serialize)]
+#[serde(crate = "rocket::serde")]
 pub struct NewOrder {
     pub order_core: OrderCore,
     pub price: i32,

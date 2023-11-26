@@ -5,9 +5,15 @@ use crate::dto::{
     order_types::{
         new_order::NewOrder, 
         cancel_order::CancelOrder, modify_order::ModifyOrder
-    }, status::response_status::Status, reject::reject_reasons::RejectReasons
+    }, 
+    status::response_status::Status, 
+    reject::reject_reasons::RejectReasons, 
+    order_helper::order_core::OrderCore
 };
 
+use super::levels::Levels;
+
+#[derive(Default)]
 pub struct OrderBook {
     pub book: HashMap<String, SymbolBook>
 }
@@ -24,7 +30,9 @@ impl OrderBook {
                 self.book.insert(security_id, book);
                 status
             },
-            Some(book) => book.add_order(order)
+            Some(book) => {
+                book.add_order(order)
+            }
         }
     }
 
@@ -34,7 +42,9 @@ impl OrderBook {
 
         match symbol_book {
             None => Status::new(order.order_core, Some(RejectReasons::OrderNotFound)),
-            Some(book) => book.cancel_order(order)
+            Some(book) => {
+                book.cancel_order(order)
+            }
         }
     }
 
@@ -44,7 +54,29 @@ impl OrderBook {
 
         match symbol_book {
             None => vec![Status::new(order.order_core, Some(RejectReasons::OrderNotFound))],
-            Some(book) => book.modify_order(order)
+            Some(book) => {
+                book.modify_order(order)
+            }
         }
+    }
+
+    pub fn get_ask_orders(&self, security_id: String) -> Option<Levels> {
+        let symbol_book = self.book.get(&security_id);
+        symbol_book.map(|book| book.get_ask_orders())
+    }
+
+    pub fn get_bid_orders(&self, security_id: String) -> Option<Levels> {
+        let symbol_book = self.book.get(&security_id);
+        symbol_book.map(|book| book.get_bid_orders())
+    }
+    
+    pub fn get_spread(&self, security_id: String) -> Result<Option<i32>, Status> {
+        let symbol_book = self.book.get(&security_id);
+
+        match symbol_book {
+            None => Err(Status::new(OrderCore::default(), Some(RejectReasons::SymbolNotFound))),
+            Some(book) => Ok(book.get_spread())
+        }
+
     }
 }

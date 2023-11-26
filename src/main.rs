@@ -1,19 +1,31 @@
-use axum::{
-    routing::get,
-    Router,
+#[macro_use] extern crate rocket;
+
+use controller::order::{
+    add_order,
+    modify_order,
+    cancel_order,
+    get_bid_orders,
+    get_ask_orders,
+    get_spread
 };
 
-pub mod dto;
-pub mod utils;
-pub mod unittests;
+use crate::controller::healthcheck;
 
-#[tokio::main]
-async fn main() {
-    let app = Router::new().route("/healthcheck", 
-                                  get(|| async { "Hello, World!" }));
+mod controller;
+mod dto;
+mod utils;
+mod unittests;
+mod service;
 
-    axum::Server::bind(&"0.0.0.0:3000".parse().unwrap())
-        .serve(app.into_make_service())
-        .await
-        .unwrap();
+#[launch]
+fn rocket() -> _ {
+    rocket::build()
+        .mount("/", routes![healthcheck::index])
+        .mount("/order", routes![
+               add_order, 
+               modify_order, 
+               cancel_order, 
+               get_ask_orders, 
+               get_bid_orders, 
+               get_spread])
 }

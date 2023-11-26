@@ -1,3 +1,4 @@
+use rocket::serde::Serialize;
 use std::collections::VecDeque;
 use std::cmp::Ordering;
 
@@ -9,7 +10,8 @@ use crate::dto::status::response_status::Status;
 
 use super::order_book_entry::OrderBookEntry;
 
-#[derive(Clone, Debug, Eq)]
+#[derive(Clone, Debug, Eq, Serialize)]
+#[serde(crate = "rocket::serde")]
 pub struct Level {
     pub price: i32,
     pub order_entries: VecDeque<OrderBookEntry>
@@ -66,10 +68,6 @@ impl Level {
             _ => Some(self.get_order_entries().front().unwrap().order.clone())
 
         }
-    }
-
-    pub fn get_front_order_entry(&self) -> Option<OrderBookEntry> {
-        self.get_order_entries().front().cloned()
     }
 }
 

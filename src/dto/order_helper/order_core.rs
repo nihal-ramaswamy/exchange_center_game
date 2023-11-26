@@ -1,4 +1,8 @@
+use rocket::serde::{Deserialize, Serialize};
+
 #[derive(Clone, PartialEq, Debug, Default, Eq)]
+#[derive(Deserialize, Serialize)]
+#[serde(crate = "rocket::serde")]
 pub struct OrderCore {
     pub username: String,
     pub order_id: String,
