@@ -1,5 +1,5 @@
 use crate::dto::{
-    order_helper::order_core::OrderCore, 
+    order_helper::{order_core::OrderCore, side::Side}, 
     order_types::{new_order::NewOrder, 
         cancel_order::CancelOrder
     }, 
@@ -64,10 +64,12 @@ fn test_levels_front() {
     let level = Level::new(new_order);
     let mut levels = Levels::new(level.clone());
 
-    let front = levels.front();
+    let front = levels.front(Side::Bid);
     assert_eq!(front, Some(level));
 
     levels.remove_order(CancelOrder::new(order_core, true), 10);
-    let front = levels.front();
+    let front = levels.front(Side::Bid);
     assert_eq!(front, None);
 }
+
+

@@ -5,7 +5,7 @@ use crate::dto::{
         new_order::NewOrder,
         cancel_order::CancelOrder
     }, 
-    reject::reject_reasons::RejectReasons, status::response_status::Status
+    reject::reject_reasons::RejectReasons, status::response_status::Status, order_helper::side::Side
 };
 
 use super::level::Level;
@@ -64,7 +64,11 @@ impl Levels {
 
     }
     
-    pub fn front(&self) -> Option<Level> {
-        self.level.first_key_value().map(|x| x.1.clone())
+    pub fn front(&self, side: Side) -> Option<Level> {
+        match side {
+            Side::Ask => self.level.first_key_value().map(|x| x.1.clone()),
+            Side::Bid => self.level.last_key_value().map(|x| x.1.clone()),
+            Side::Unknown => panic!("Unknown side")
+        }
     }
 }

@@ -2,7 +2,7 @@ use chrono::{DateTime, Local};
 
 use crate::dto::order_types::new_order::NewOrder;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct OrderBookEntry {
     pub order: NewOrder,
     pub creation_time: DateTime<Local>,
@@ -15,3 +15,4 @@ impl OrderBookEntry {
         OrderBookEntry { order, creation_time }
     }
 }
+

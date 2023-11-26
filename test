@@ -1,0 +1,29 @@
+
+running 24 tests
+test unittests::order_book::book::test_add_order_unknown_side - should panic ... ok
+test unittests::matching_engine::matching_top::test_matching_top_no_trades ... ok
+test unittests::matching_engine::matching_top::test_matching_top_same_quantity_same_price_one_order ... ok
+test unittests::matching_engine::matching_top::test_matching_top_diff_quantity_same_price_one_order_buy_none ... ok
+test unittests::matching_engine::matching_top::test_matching_top_ask_satisfied_by_two_bids ... ok
+test unittests::matching_engine::matching_top::test_matching_top_ask_lower_bid_higher ... ok
+test unittests::matching_engine::matching_top::test_matching_top_diff_quantity_same_price_one_order_ask_none ... ok
+test unittests::order_book::book::test_cancel_order_unknown_side - should panic ... ok
+test unittests::order_book::book::test_modify_order ... ok
+test unittests::order_book::book::test_spread ... ok
+test unittests::order_book::level::test_level_equality_when_price_equal ... ok
+test unittests::order_book::level::test_level_equality_when_price_not_equal ... ok
+test unittests::order_book::level::test_level_get_side ... ok
+test unittests::order_book::level::test_level_insert_and_get_num_orders ... ok
+test unittests::order_book::level::test_level_ordering ... ok
+test unittests::order_book::level::test_level_remove ... ok
+test unittests::order_book::level::test_levels_front ... ok
+test unittests::order_book::levels::test_levels_exists ... ok
+test unittests::order_book::levels::test_levels_front ... ok
+test unittests::order_types::new_order::test_comparison ... ok
+test unittests::order_types::new_order::test_equality_when_order_core_equal ... ok
+test unittests::order_book::levels::test_levels_insert ... ok
+test unittests::order_types::new_order::test_equality_when_order_core_not_equal ... ok
+test unittests::order_book::levels::test_levels_remove ... ok
+
+test result: ok. 24 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

@@ -9,7 +9,7 @@ use crate::dto::status::response_status::Status;
 
 use super::order_book_entry::OrderBookEntry;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq)]
 pub struct Level {
     pub price: i32,
     pub order_entries: VecDeque<OrderBookEntry>
@@ -67,6 +67,10 @@ impl Level {
 
         }
     }
+
+    pub fn get_front_order_entry(&self) -> Option<OrderBookEntry> {
+        self.get_order_entries().front().cloned()
+    }
 }
 
 impl PartialEq for Level {
@@ -75,15 +79,14 @@ impl PartialEq for Level {
     }
 }
 
-impl Eq for Level {}
-
 impl Ord for Level {
     fn cmp(&self, other: &Self) -> Ordering {
-        match self.get_side() {
-            Side::Unknown => Ordering::Equal,
-            Side::Bid => self.price.cmp(&other.price),
-            Side::Ask => other.price.cmp(&self.price)
-        }
+        let self_front = self.get_front_order()
+            .expect("Front order cannot be null for comparing");
+        let other_front = other.get_front_order()
+            .expect("Front order cannot be null for comparing");
+        
+        self_front.cmp(&other_front)
     }
 }
 

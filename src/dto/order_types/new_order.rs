@@ -1,3 +1,5 @@
+use std::cmp::Ordering;
+
 use crate::{
     dto::{
         order_helper::{
@@ -11,7 +13,7 @@ use crate::{
 
 use super::modify_order::ModifyOrder;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq)]
 pub struct NewOrder {
     pub order_core: OrderCore,
     pub price: i32,
@@ -47,11 +49,40 @@ impl NewOrder {
     
 }
 
+impl PartialOrd for NewOrder {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for NewOrder {
+    fn cmp(&self, other: &Self) -> Ordering {
+
+        let match_quantity = |a: &Self, b: &Self| -> Ordering {
+            a.current_quantity.cmp(&b.current_quantity)
+        };
+
+        let match_price_quantity = |a: &Self, b: &Self| -> Ordering {
+            let ordering_for_price = a.price.cmp(&b.price);
+
+            match ordering_for_price {
+                Ordering::Equal => match_quantity(a, b),
+                _ => ordering_for_price 
+            }
+        };
+
+
+        match self.side {
+            Side::Bid => match_price_quantity(self, other),
+            Side::Ask => match_price_quantity(other, self),
+            Side::Unknown => Ordering::Equal
+        }
+    }
+}
+
 impl PartialEq for NewOrder {
     fn eq(&self, other: &Self) -> bool {
         self.order_core == other.order_core
     }
     
 }
-
-impl Eq for NewOrder {}

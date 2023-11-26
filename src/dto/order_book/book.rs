@@ -11,15 +11,22 @@ use crate::dto::{
 };
 use crate::dto::order_book::levels::Levels;
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Clone)]
 pub struct OrderBook {
-    pub security: String,   
+    pub security: String,    
     pub ask_levels: Levels,
     pub bid_levels: Levels,
     pub orders: HashMap<String, NewOrder>
 }
 
 impl OrderBook {
+    pub fn new(security: String) -> Self {
+        OrderBook {
+            security,
+            ..OrderBook::default()
+        }
+    }
+
     pub fn add_order(&mut self, order: NewOrder) -> Status {
         self.orders.insert(order.clone().order_core.order_id, order.clone());
 
@@ -73,8 +80,8 @@ impl OrderBook {
     }
 
     pub fn get_spread(&self) -> Option<i32> {
-        let ask_price = self.ask_levels.front();
-        let bid_price = self.bid_levels.front();
+        let ask_price = self.ask_levels.front(Side::Ask);
+        let bid_price = self.bid_levels.front(Side::Bid);
 
         match ask_price.is_some() && bid_price.is_some() {
             false => None,

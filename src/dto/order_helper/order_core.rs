@@ -1,4 +1,4 @@
-#[derive(Clone, PartialEq, Debug, Default)]
+#[derive(Clone, PartialEq, Debug, Default, Eq)]
 pub struct OrderCore {
     pub username: String,
     pub order_id: String,
