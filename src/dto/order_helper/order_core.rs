@@ -10,7 +10,4 @@ pub struct OrderCore {
 }
 
 impl OrderCore {
-    pub fn new(username: String, order_id: String, security_id: String) -> Self {
-        OrderCore { username, order_id, security_id }
-    }
 }

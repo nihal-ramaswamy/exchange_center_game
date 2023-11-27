@@ -66,12 +66,12 @@ impl OrderBook {
 
     pub fn get_ask_orders(&self, security_id: String) -> Levels {
         let symbol_book = self.book.get(&security_id);
-        symbol_book.map(|book| book.get_ask_orders()).unwrap_or(Levels::default())
+        symbol_book.map(|book| book.get_ask_orders()).unwrap_or_default()
     }
 
     pub fn get_bid_orders(&self, security_id: String) -> Levels {
         let symbol_book = self.book.get(&security_id);
-        symbol_book.map(|book| book.get_bid_orders()).unwrap_or(Levels::default())
+        symbol_book.map(|book| book.get_bid_orders()).unwrap_or_default()
     }
     
     pub fn get_spread(&self, security_id: String) -> Result<i32, Status> {

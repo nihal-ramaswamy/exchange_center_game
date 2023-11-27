@@ -6,3 +6,4 @@ pub fn get_side_from_bool(is_buy_side: bool) -> Side {
         false => Side::Ask
     }
 } 
+

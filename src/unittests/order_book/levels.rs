@@ -1,3 +1,5 @@
+use std::collections::BTreeMap;
+
 use crate::dto::{
     order_helper::{order_core::OrderCore, side::Side}, 
     order_types::{new_order::NewOrder, 
@@ -10,13 +12,22 @@ use crate::dto::{
     reject::reject_reasons::RejectReasons
 };
 
+fn levels_new(level: Level) -> Levels {
+    let mut new_level: BTreeMap<i32, Level> = BTreeMap::new();
+    let price = level.price;
+    new_level.insert(price, level);
+    Levels { level: new_level }
+}
+
+
+
 #[test]
 fn test_levels_exists() {
     let order_core = OrderCore::default();
     let new_order = NewOrder::new(order_core, 10, 10, true);
     let level = Level::new(new_order);
 
-    let levels = Levels::new(level);
+    let levels = levels_new(level);
 
     assert!(levels.exists(10));
 }
@@ -27,7 +38,7 @@ fn test_levels_insert() {
     let new_order = NewOrder::new(order_core.clone(), 10, 10, true);
     let level = Level::new(new_order);
 
-    let mut levels = Levels::new(level);
+    let mut levels = levels_new(level);
     
     let new_order1 = NewOrder::new(order_core.clone(), 11, 10, true);
     let status = levels.insert(new_order1);
@@ -46,7 +57,7 @@ fn test_levels_remove() {
     let new_order = NewOrder::new(order_core.clone(), 10, 10, true);
 
     let level = Level::new(new_order);
-    let mut levels = Levels::new(level);
+    let mut levels = levels_new(level);
 
     let cancel_order = CancelOrder::new(order_core, true);
     let status = levels.remove_order(cancel_order.clone(), 11);
@@ -62,7 +73,7 @@ fn test_levels_front() {
     let new_order = NewOrder::new(order_core.clone(), 10, 10, true);
 
     let level = Level::new(new_order);
-    let mut levels = Levels::new(level.clone());
+    let mut levels = levels_new(level.clone());
 
     let front = levels.front(Side::Bid);
     assert_eq!(front, Some(level));

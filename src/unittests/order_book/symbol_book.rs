@@ -11,6 +11,10 @@ use crate::dto::{
     }
 };
 
+fn order_core_new(username: String, order_id: String, security_id: String) -> OrderCore {
+    OrderCore { username, order_id, security_id }
+}
+
 #[test]
 fn test_spread() {
     let mut book = SymbolBook::default();
@@ -18,22 +22,22 @@ fn test_spread() {
     let one = "1".to_string();
     let two = "2".to_string();
 
-    let new_order_buy = NewOrder::new(OrderCore::new(
+    let new_order_buy = NewOrder::new(order_core_new(
             one.clone(), one.clone(), one), 11, 10, true);
-    let new_order_sell = NewOrder::new(OrderCore::new(
+    let new_order_sell = NewOrder::new(order_core_new(
             two.clone(), two.clone(), two), 12, 10, false);
 
     book.add_order(new_order_buy);
     book.add_order(new_order_sell.clone());
     
     let spread = book.get_spread();
-    assert_eq!(spread.unwrap(), 1);
+    assert_eq!(spread, 1);
 
     let mut book = SymbolBook::default();
     book.add_order(new_order_sell);
 
     let spread = book.get_spread();
-    assert_eq!(spread, None);
+    assert_eq!(spread, -1);
 }
 
 #[test]

@@ -10,6 +10,10 @@ use crate::dto::{
     reject::reject_reasons::RejectReasons
 };
 
+fn order_core_new(username: String, order_id: String, security_id: String) -> OrderCore {
+    OrderCore { username, order_id, security_id }
+}
+
 #[test]
 fn test_level_equality_when_price_equal() {
     let new_order1 = NewOrder::new(OrderCore::default(), 10, 10, true);
@@ -109,7 +113,7 @@ fn test_level_remove() {
     let new_order1 = NewOrder::new(OrderCore::default(), 1, 1, true);
     let mut level1 = Level::new(new_order1);
 
-    let order_core1 = OrderCore::new("test".to_string(), 
+    let order_core1 = order_core_new("test".to_string(), 
                                      "test".to_string(),
                                      "test".to_string());
     let status = level1.remove(order_core1);

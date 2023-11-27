@@ -20,12 +20,6 @@ pub struct Levels {
 }
 
 impl Levels {
-    pub fn new(level: Level) -> Self {
-        let mut new_level: BTreeMap<i32, Level> = BTreeMap::new();
-        let price = level.price;
-        new_level.insert(price, level);
-        Levels { level: new_level }
-    }
 
     pub fn exists(&self, price: i32 )-> bool {
         self.level.get(&price).is_some()
