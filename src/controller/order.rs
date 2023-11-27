@@ -53,7 +53,10 @@ pub fn get_trades() -> EventStream![] {
     let stream = EventStream! {
         let mut interval = time::interval(Duration::from_nanos(1));
         loop {
-            yield Event::json(&order::get_trades());
+            let trade_status = order::get_trades();
+            if !trade_status.is_empty() {
+                yield Event::json(&trade_status);
+            }
             interval.tick().await;
         }
     };
