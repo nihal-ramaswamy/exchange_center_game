@@ -4,7 +4,7 @@ use crate::{
     dto::{
         order_helper::{
             order_core::OrderCore, 
-            side::Side}, 
+            side::Side, order_parser::OrderParser}, 
         traits::order::Order}, 
     utils::order::get_side_from_bool
 };
@@ -32,6 +32,10 @@ impl ModifyOrder {
             quantity, 
             side: get_side_from_bool(is_buy_side) 
         }
+    }
+
+    pub fn new_from_parser(order: OrderParser) -> Self {
+        ModifyOrder::new(order.order_core, order.price.unwrap(), order.quantity.unwrap(), order.is_buy_side)
     }
 
 }

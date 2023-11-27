@@ -6,9 +6,13 @@ use crate::dto::{
         new_order::NewOrder, 
         cancel_order::CancelOrder, modify_order::ModifyOrder
     }, 
-    status::{response_status::Status, trade_status::TradeStatus}, 
+    status::{
+        response_status::Status, 
+        trade_status::TradeStatus
+    }, 
     reject::reject_reasons::RejectReasons, 
-    order_helper::order_core::OrderCore, matching_engine::matching_top::MatchingTop
+    order_helper::order_core::OrderCore, 
+    matching_engine::matching_top::MatchingTop
 };
 
 use super::levels::Levels;
@@ -60,17 +64,17 @@ impl OrderBook {
         }
     }
 
-    pub fn get_ask_orders(&self, security_id: String) -> Option<Levels> {
+    pub fn get_ask_orders(&self, security_id: String) -> Levels {
         let symbol_book = self.book.get(&security_id);
-        symbol_book.map(|book| book.get_ask_orders())
+        symbol_book.map(|book| book.get_ask_orders()).unwrap_or(Levels::default())
     }
 
-    pub fn get_bid_orders(&self, security_id: String) -> Option<Levels> {
+    pub fn get_bid_orders(&self, security_id: String) -> Levels {
         let symbol_book = self.book.get(&security_id);
-        symbol_book.map(|book| book.get_bid_orders())
+        symbol_book.map(|book| book.get_bid_orders()).unwrap_or(Levels::default())
     }
     
-    pub fn get_spread(&self, security_id: String) -> Result<Option<i32>, Status> {
+    pub fn get_spread(&self, security_id: String) -> Result<i32, Status> {
         let symbol_book = self.book.get(&security_id);
 
         match symbol_book {

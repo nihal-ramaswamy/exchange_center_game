@@ -1,7 +1,7 @@
 use rocket::serde::{Deserialize, Serialize};
 
 #[derive(Clone, PartialEq, Debug, Default, Eq)]
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, FromForm)]
 #[serde(crate = "rocket::serde")]
 pub struct OrderCore {
     pub username: String,

@@ -66,7 +66,7 @@ impl SymbolBook {
 
         match order.side {
             Side::Bid => self.bid_levels.remove_order(order, price.unwrap()),
-            Side::Ask => self.bid_levels.remove_order(order, price.unwrap()),
+            Side::Ask => self.ask_levels.remove_order(order, price.unwrap()),
             Side::Unknown => panic!("Unknown side")
         }
     }
@@ -79,13 +79,13 @@ impl SymbolBook {
         self.bid_levels.clone()
     }
 
-    pub fn get_spread(&self) -> Option<i32> {
+    pub fn get_spread(&self) -> i32 {
         let ask_price = self.ask_levels.front(Side::Ask);
         let bid_price = self.bid_levels.front(Side::Bid);
 
         match ask_price.is_some() && bid_price.is_some() {
-            false => None,
-            true => Some(ask_price.unwrap().price - bid_price.unwrap().price)
+            false => -1,
+            true => ask_price.unwrap().price - bid_price.unwrap().price
         }
     }
 }
