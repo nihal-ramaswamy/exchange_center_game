@@ -9,8 +9,7 @@ use crate::{
     utils::order::get_side_from_bool
 };
 
-#[derive(Clone)]
-#[derive(Deserialize)]
+#[derive(Clone, Deserialize, Debug)]
 #[serde(crate = "rocket::serde")]
 pub struct ModifyOrder {
     pub order_core: OrderCore,

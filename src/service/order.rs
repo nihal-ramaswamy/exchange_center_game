@@ -24,19 +24,21 @@ lazy_static! {
 pub fn add_order(order: OrderParser) -> Status {
     let order = NewOrder::new_from_parser(order);
     let mut order_book = ORDER_BOOK.lock().unwrap();
+    info!("Adding order: {:?}", order);
     order_book.add_order(order)
 }
 
 pub fn cancel_order(order: OrderParser) -> Status {
     let order = CancelOrder::new_from_parser(order);
     let mut order_book = ORDER_BOOK.lock().unwrap();
-    dbg!(order.clone());
+    info!("Canceling order: {:?}", order);
     order_book.cancel_order(order)
 }
 
 pub fn modify_order(order: OrderParser) -> Vec<Status> {
     let order = ModifyOrder::new_from_parser(order);
     let mut order_book = ORDER_BOOK.lock().unwrap();
+    info!("Modifying order: {:?}", order);
     order_book.modify_order(order)
 }
 

@@ -37,6 +37,7 @@ pub fn get_bid_orders(security_id: String) -> Json<Levels> {
 
 #[get("/spread/<security_id>")]
 pub fn get_spread(security_id: String) -> Json<Result<i32, Status>> {
+    
     Json(order::get_spread(security_id))
 }
 
