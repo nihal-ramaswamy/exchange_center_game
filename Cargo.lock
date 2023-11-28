@@ -286,6 +286,7 @@ dependencies = [
  "chrono",
  "env_logger",
  "lazy_static",
+ "once_cell",
  "rand",
  "rocket",
 ]

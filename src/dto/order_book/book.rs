@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, sync::Mutex};
 
 use crate::dto::{
     order_book::symbol_book::SymbolBook, 
@@ -19,7 +19,7 @@ use super::levels::Levels;
 
 #[derive(Default)]
 pub struct OrderBook {
-    pub book: HashMap<String, SymbolBook>
+    pub book: HashMap<String, Mutex<SymbolBook>>
 }
 
 impl OrderBook {
@@ -31,10 +31,11 @@ impl OrderBook {
             None => {
                 let mut book = SymbolBook::new(security_id.clone());
                 let status = book.add_order(order);
-                self.book.insert(security_id, book);
+                self.book.insert(security_id, Mutex::new(book));
                 status
             },
             Some(book) => {
+                let book = book.get_mut().unwrap();
                 book.add_order(order)
             }
         }
@@ -47,6 +48,7 @@ impl OrderBook {
         match symbol_book {
             None => Status::new(order.order_core, Some(RejectReasons::OrderNotFound)),
             Some(book) => {
+                let book = book.get_mut().unwrap();
                 book.cancel_order(order)
             }
         }
@@ -59,6 +61,7 @@ impl OrderBook {
         match symbol_book {
             None => vec![Status::new(order.order_core, Some(RejectReasons::OrderNotFound))],
             Some(book) => {
+                let book = book.get_mut().unwrap();
                 book.modify_order(order)
             }
         }
@@ -66,12 +69,12 @@ impl OrderBook {
 
     pub fn get_ask_orders(&self, security_id: String) -> Levels {
         let symbol_book = self.book.get(&security_id);
-        symbol_book.map(|book| book.get_ask_orders()).unwrap_or_default()
+        symbol_book.map(|book| book.lock().unwrap().get_ask_orders()).unwrap_or_default()
     }
 
     pub fn get_bid_orders(&self, security_id: String) -> Levels {
         let symbol_book = self.book.get(&security_id);
-        symbol_book.map(|book| book.get_bid_orders()).unwrap_or_default()
+        symbol_book.map(|book| book.lock().unwrap().get_bid_orders()).unwrap_or_default()
     }
     
     pub fn get_spread(&self, security_id: String) -> Result<i32, Status> {
@@ -79,7 +82,7 @@ impl OrderBook {
 
         match symbol_book {
             None => Err(Status::new(OrderCore::default(), Some(RejectReasons::SymbolNotFound))),
-            Some(book) => Ok(book.get_spread())
+            Some(book) => Ok(book.lock().unwrap().get_spread())
         }
     }
 
@@ -98,6 +101,7 @@ impl OrderBook {
             match symbol_book {
                 None => continue,
                 Some(book) => {
+                    let book = book.get_mut().unwrap();
                     let statuses_for_symbol = book.r#match::<MatchingTop>();
                     for status in statuses_for_symbol {
                         statuses.push(status);
