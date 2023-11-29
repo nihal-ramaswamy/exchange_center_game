@@ -45,7 +45,7 @@ It outputs the following response.
         "order_id": "test2",
         "security_id": "test"
     },
-    "status": null
+    "status": Accepted
 }
 ```
 If there is any error, it can show the error in the status field.
@@ -76,7 +76,7 @@ It outputs the following response.
             "order_id": "test2",
             "security_id": "test"
         },
-        "status": null
+        "status": Accepted
     },
     {
         "order_core": {
@@ -84,7 +84,7 @@ It outputs the following response.
             "order_id": "test2",
             "security_id": "test"
         },
-        "status": null
+        "status": Accepted
     }
 ]
 ```
@@ -111,7 +111,7 @@ It outputs the following response.
         "order_id": "test2",
         "security_id": "test"
     },
-    "status": null
+    "status": Accepted
 }
 ```
 
