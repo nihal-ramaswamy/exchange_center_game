@@ -12,7 +12,7 @@ use crate::dto::{
     }, 
     reject::reject_reasons::RejectReasons, 
     order_helper::order_core::OrderCore, 
-    matching_engine::matching_top::MatchingTop
+    matching_engine::matching_top::MatchingTop, traits::book::Book
 };
 
 use super::levels::Levels;
@@ -22,8 +22,8 @@ pub struct OrderBook {
     pub book: HashMap<String, Mutex<SymbolBook>>
 }
 
-impl OrderBook {
-    pub fn add_order(&mut self, order: NewOrder) -> Status {
+impl Book for OrderBook {
+    fn add_order(&mut self, order: NewOrder) -> Status {
         let security_id = order.clone().order_core.security_id;
         let symbol_book = self.book.get_mut(&security_id);
         
@@ -41,7 +41,7 @@ impl OrderBook {
         }
     }
 
-    pub fn cancel_order(&mut self, order: CancelOrder) -> Status {
+    fn cancel_order(&mut self, order: CancelOrder) -> Status {
         let security_id = order.clone().order_core.security_id;
         let symbol_book = self.book.get_mut(&security_id);
 
@@ -54,7 +54,7 @@ impl OrderBook {
         }
     }
 
-    pub fn modify_order(&mut self, order: ModifyOrder) -> Vec<Status> {
+    fn modify_order(&mut self, order: ModifyOrder) -> Vec<Status> {
         let security_id = order.clone().order_core.security_id;
         let symbol_book = self.book.get_mut(&security_id);
 
@@ -67,17 +67,17 @@ impl OrderBook {
         }
     }
 
-    pub fn get_ask_orders(&self, security_id: String) -> Levels {
+    fn get_ask_orders(&self, security_id: String) -> Levels {
         let symbol_book = self.book.get(&security_id);
         symbol_book.map(|book| book.lock().unwrap().get_ask_orders()).unwrap_or_default()
     }
 
-    pub fn get_bid_orders(&self, security_id: String) -> Levels {
+    fn get_bid_orders(&self, security_id: String) -> Levels {
         let symbol_book = self.book.get(&security_id);
         symbol_book.map(|book| book.lock().unwrap().get_bid_orders()).unwrap_or_default()
     }
     
-    pub fn get_spread(&self, security_id: String) -> Result<i32, Status> {
+    fn get_spread(&self, security_id: String) -> Result<i32, Status> {
         let symbol_book = self.book.get(&security_id);
 
         match symbol_book {
@@ -86,11 +86,7 @@ impl OrderBook {
         }
     }
 
-    fn get_security_ids(&self) -> Vec<String>  {
-        self.book.keys().cloned().collect()
-    }
-
-    pub fn get_trades(&mut self) -> Vec<TradeStatus> {
+    fn run_trades(&mut self) -> Vec<TradeStatus> {
         let security_ids = self.get_security_ids();
 
         let mut statuses: Vec<TradeStatus> = Vec::new();
@@ -112,4 +108,11 @@ impl OrderBook {
 
         statuses
     }
+}
+
+impl OrderBook {
+    fn get_security_ids(&self) -> Vec<String>  {
+        self.book.keys().cloned().collect()
+    }
+
 }
