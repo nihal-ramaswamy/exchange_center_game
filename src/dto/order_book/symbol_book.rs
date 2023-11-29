@@ -7,7 +7,8 @@ use crate::dto::{
     }, 
     order_helper::side::Side, 
     status::{response_status::Status, trade_status::TradeStatus},
-    reject::reject_reasons::RejectReasons, traits::r#match::Match
+    traits::r#match::Match,
+    status_codes::status::StatusCodes
 };
 use crate::dto::order_book::levels::Levels;
 
@@ -59,7 +60,7 @@ impl SymbolBook {
 
         if price.is_none() {
             return Status::new(order.order_core, 
-                               Some(RejectReasons::OrderNotFound));
+                               StatusCodes::OrderNotFound);
         }
 
         self.orders.remove(&order.order_core.order_id);

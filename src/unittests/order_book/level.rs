@@ -6,8 +6,7 @@ use crate::dto::{
         order_core::OrderCore, 
         side::Side
     }, 
-    order_book::level::Level, 
-    reject::reject_reasons::RejectReasons
+    order_book::level::Level, status_codes::status::StatusCodes, 
 };
 
 fn order_core_new(username: String, order_id: String, security_id: String) -> OrderCore {
@@ -95,15 +94,15 @@ fn test_level_insert_and_get_num_orders() {
 
     let new_order_diff_price = NewOrder::new(OrderCore::default(), 10, 1, true);
     let status = level1.insert(new_order_diff_price);
-    assert_eq!(status.status, Some(RejectReasons::PriceMisMatch));
+    assert_eq!(status.status, StatusCodes::PriceMisMatch);
 
     let new_order_diff_side = NewOrder::new(OrderCore::default(), 1, 10, false);
     let status = level1.insert(new_order_diff_side);
-    assert_eq!(status.status, Some(RejectReasons::SideMisMatch));
+    assert_eq!(status.status, StatusCodes::SideMisMatch);
 
     let new_order_correct = NewOrder::new(OrderCore::default(), 1, 100, true);
     let status = level1.insert(new_order_correct);
-    assert_eq!(status.status, None);
+    assert_eq!(status.status, StatusCodes::Accepted);
     assert_eq!(level1.get_num_orders(), 2);
 }
 
@@ -117,11 +116,11 @@ fn test_level_remove() {
                                      "test".to_string(),
                                      "test".to_string());
     let status = level1.remove(order_core1);
-    assert_eq!(status.status, Some(RejectReasons::OrderNotFound));
+    assert_eq!(status.status, StatusCodes::OrderNotFound);
 
     let order_core1 = OrderCore::default();
     let status = level1.remove(order_core1);
-    assert_eq!(status.status, None);
+    assert_eq!(status.status, StatusCodes::Accepted);
     assert_eq!(level1.get_num_orders(), 0);
 }
 

@@ -10,9 +10,9 @@ use crate::dto::{
         response_status::Status, 
         trade_status::TradeStatus
     }, 
-    reject::reject_reasons::RejectReasons, 
     order_helper::order_core::OrderCore, 
-    matching_engine::matching_top::MatchingTop, traits::book::Book
+    matching_engine::matching_top::MatchingTop, traits::book::Book, 
+    status_codes::status::StatusCodes
 };
 
 use super::levels::Levels;
@@ -46,7 +46,7 @@ impl Book for OrderBook {
         let symbol_book = self.book.get_mut(&security_id);
 
         match symbol_book {
-            None => Status::new(order.order_core, Some(RejectReasons::OrderNotFound)),
+            None => Status::new(order.order_core, StatusCodes::OrderNotFound),
             Some(book) => {
                 let book = book.get_mut().unwrap();
                 book.cancel_order(order)
@@ -59,7 +59,7 @@ impl Book for OrderBook {
         let symbol_book = self.book.get_mut(&security_id);
 
         match symbol_book {
-            None => vec![Status::new(order.order_core, Some(RejectReasons::OrderNotFound))],
+            None => vec![Status::new(order.order_core, StatusCodes::OrderNotFound)],
             Some(book) => {
                 let book = book.get_mut().unwrap();
                 book.modify_order(order)
@@ -81,7 +81,7 @@ impl Book for OrderBook {
         let symbol_book = self.book.get(&security_id);
 
         match symbol_book {
-            None => Err(Status::new(OrderCore::default(), Some(RejectReasons::SymbolNotFound))),
+            None => Err(Status::new(OrderCore::default(), StatusCodes::SymbolNotFound)),
             Some(book) => Ok(book.lock().unwrap().get_spread())
         }
     }

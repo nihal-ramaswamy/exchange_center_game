@@ -1,19 +1,18 @@
 use rocket::serde::Serialize;
 
 use crate::dto::{
-    order_helper::order_core::OrderCore, 
-    reject::reject_reasons::RejectReasons
+    order_helper::order_core::OrderCore, status_codes::status::StatusCodes, 
 };
 
 #[derive(Serialize)]
 #[serde(crate = "rocket::serde")]
 pub struct Status {
     pub order_core: OrderCore,
-    pub status: Option<RejectReasons>
+    pub status: StatusCodes
 }
 
 impl Status {
-    pub fn new(order_core: OrderCore, status: Option<RejectReasons>) -> Self {
+    pub fn new(order_core: OrderCore, status: StatusCodes) -> Self {
         Status {order_core, status}
     }
 }

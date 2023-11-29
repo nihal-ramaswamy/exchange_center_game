@@ -5,8 +5,8 @@ use std::cmp::Ordering;
 use crate::dto::order_helper::order_core::OrderCore;
 use crate::dto::order_helper::side::Side;
 use crate::dto::order_types::new_order::NewOrder;
-use crate::dto::reject::reject_reasons::RejectReasons;
 use crate::dto::status::response_status::Status;
+use crate::dto::status_codes::status::StatusCodes;
 
 use super::order_book_entry::OrderBookEntry;
 
@@ -27,13 +27,13 @@ impl Level {
 
     pub fn insert(&mut self, order: NewOrder) -> Status {
         if self.price != order.price {
-            Status::new(order.order_core, Some(RejectReasons::PriceMisMatch)) 
+            Status::new(order.order_core, StatusCodes::PriceMisMatch) 
         } else if self.get_side() != order.side {
-            Status::new(order.order_core, Some(RejectReasons::SideMisMatch))
+            Status::new(order.order_core, StatusCodes::SideMisMatch)
         } else {
             let order_entry = OrderBookEntry::new(order.clone());
             self.order_entries.push_back(order_entry);
-            Status::new(order.order_core, None)
+            Status::new(order.order_core, StatusCodes::Accepted)
         }
     }
 
@@ -41,9 +41,9 @@ impl Level {
         if let Some(pos) = self.order_entries.iter()
                             .position(|x| x.order.order_core == order_core) {
             self.order_entries.remove(pos);
-            Status::new(order_core, None)
+            Status::new(order_core, StatusCodes::Accepted)
         } else {
-            Status::new(order_core, Some(RejectReasons::OrderNotFound))
+            Status::new(order_core, StatusCodes::OrderNotFound)
         }
     }
 

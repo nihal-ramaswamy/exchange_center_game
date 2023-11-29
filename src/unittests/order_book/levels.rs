@@ -8,8 +8,7 @@ use crate::dto::{
     order_book::{
         level::Level, 
         levels::Levels
-    }, 
-    reject::reject_reasons::RejectReasons
+    }, status_codes::status::StatusCodes,
 };
 
 fn levels_new(level: Level) -> Levels {
@@ -42,11 +41,11 @@ fn test_levels_insert() {
     
     let new_order1 = NewOrder::new(order_core.clone(), 11, 10, true);
     let status = levels.insert(new_order1);
-    assert_eq!(status.status, None);
+    assert_eq!(status.status, StatusCodes::Accepted);
 
     let new_order2 = NewOrder::new(order_core, 10, 10, false);
     let status = levels.insert(new_order2);
-    assert_eq!(status.status, Some(RejectReasons::SideMisMatch));
+    assert_eq!(status.status, StatusCodes::SideMisMatch);
 
     // Other cases handled by level.insert 
 }
@@ -61,10 +60,10 @@ fn test_levels_remove() {
 
     let cancel_order = CancelOrder::new(order_core, true);
     let status = levels.remove_order(cancel_order.clone(), 11);
-    assert_eq!(status.status, Some(RejectReasons::OrderNotFound));
+    assert_eq!(status.status, StatusCodes::OrderNotFound);
 
     let status = levels.remove_order(cancel_order, 10);
-    assert_eq!(status.status, None);
+    assert_eq!(status.status, StatusCodes::Accepted);
 }
 
 #[test]

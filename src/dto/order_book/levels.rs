@@ -6,9 +6,8 @@ use crate::dto::{
         new_order::NewOrder,
         cancel_order::CancelOrder
     }, 
-    reject::reject_reasons::RejectReasons, 
     status::response_status::Status, 
-    order_helper::side::Side
+    order_helper::side::Side, status_codes::status::StatusCodes
 };
 
 use super::level::Level;
@@ -35,7 +34,7 @@ impl Levels {
             false => {
                 let level = Level::new(order.clone());
                 self.level.insert(price, level);
-                Status::new(order.order_core, None)
+                Status::new(order.order_core, StatusCodes::Accepted)
             }
         }
     }
@@ -52,7 +51,7 @@ impl Levels {
         let level = self.level.get_mut(&price);
         
         match level {
-            None => Status::new(order_core, Some(RejectReasons::OrderNotFound)),
+            None => Status::new(order_core, StatusCodes::OrderNotFound),
             Some(level) => {
                 let status = level.remove(order_core);
                 self.clean(price);
