@@ -16,3 +16,8 @@ fn gen_uuid() -> String {
 pub fn gen_order_id() -> String {
     gen_uuid()
 }
+
+pub fn gen_trade_id() -> String {
+    gen_uuid()
+}
+

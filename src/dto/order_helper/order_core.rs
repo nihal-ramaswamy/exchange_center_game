@@ -21,7 +21,7 @@ impl OrderCore {
     }
 
     pub fn new_from_parser(order_core: OrderCoreParser) -> Self {
-        let order_id = order_core.order_id.unwrap_or_else(|| gen_order_id());
+        let order_id = order_core.order_id.unwrap_or_else(gen_order_id);
 
         OrderCore { 
             username: order_core.username, 

@@ -3,8 +3,7 @@ Build bots to trade on the exchange and compete with other players. A simulation
 
 This stock exchange simulator has the following constraints:
 1. Only continuous phase implemented
-2. Only limit orders 
-
+2. Only limit orders and integer price values
 
 ---
 
@@ -185,6 +184,7 @@ When a trade happens, the output can look like the response shown below.
         },
         "price": 6,
         "quantity": 5,
+        "trade_id": "trade_id",
         "trade_time": "2023-11-29T09:58:09.779691+05:30"
     }
 ]
