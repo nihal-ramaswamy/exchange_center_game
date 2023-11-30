@@ -41,7 +41,12 @@ impl NewOrder {
     }
 
     pub fn new_from_parser(order: OrderParser) -> Self {
-        NewOrder::new(order.order_core, order.price.unwrap(), order.quantity.unwrap(), order.is_buy_side)
+        NewOrder::new(
+            OrderCore::new_from_parser(order.order_core), 
+            order.price.unwrap(), 
+            order.quantity.unwrap(), 
+            order.is_buy_side
+            )
     }
     
     pub fn from_modify_order(modify_order: ModifyOrder) -> Self {

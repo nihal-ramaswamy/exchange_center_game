@@ -25,6 +25,6 @@ impl CancelOrder {
     }
 
     pub fn new_from_parser(order: OrderParser) -> Self {
-        CancelOrder::new(order.order_core, order.is_buy_side)
+        CancelOrder::new(OrderCore::new_from_parser(order.order_core), order.is_buy_side)
     }
 }

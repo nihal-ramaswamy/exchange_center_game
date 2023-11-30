@@ -1,3 +1,5 @@
+use uuid::Uuid;
+
 use crate::dto::order_helper::side::Side;
 
 pub fn get_side_from_bool(is_buy_side: bool) -> Side {
@@ -6,3 +8,11 @@ pub fn get_side_from_bool(is_buy_side: bool) -> Side {
         false => Side::Ask
     }
 } 
+
+fn gen_uuid() -> String {
+    Uuid::new_v4().to_string()
+}
+
+pub fn gen_order_id() -> String {
+    gen_uuid()
+}

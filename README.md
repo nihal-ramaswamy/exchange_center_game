@@ -1,6 +1,11 @@
 # Exchange Center Game 
 Build bots to trade on the exchange and compete with other players. A simulation of the stock market.
 
+This stock exchange simulator has the following constraints:
+1. Only continuous phase implemented
+2. Only limit orders 
+
+
 ---
 
 ## Installation
@@ -28,8 +33,7 @@ This is an endpoint to add new orders. It takes in the following `json` as the r
 ```json 
 {
     "order_core": {
-        "username": "test1",
-        "order_id": "test2",
+        "username": "nihal_ramaswamy",
         "security_id": "test"
     },
     "price": 6,
@@ -41,8 +45,8 @@ It outputs the following response.
 ```json
 {
     "order_core": {
-        "username": "test1",
-        "order_id": "test2",
+        "username": "nihal_ramaswamy",
+        "order_id": "random_order_id",
         "security_id": "test"
     },
     "status": Accepted
@@ -58,8 +62,8 @@ This is an endpoint to modify an existing order. It takes the following `json` a
 ```json 
 {
     "order_core": {
-        "username": "test1",
-        "order_id": "test2",
+        "username": "nihal_ramaswamy",
+        "order_id": "order_id",
         "security_id": "test"
     },
     "price": 7,
@@ -72,16 +76,16 @@ It outputs the following response.
 [
     {
         "order_core": {
-            "username": "test1",
-            "order_id": "test2",
+            "username": "nihal_ramaswamy",
+            "order_id": "order_id",
             "security_id": "test"
         },
         "status": Accepted
     },
     {
         "order_core": {
-            "username": "test1",
-            "order_id": "test2",
+            "username": "nihal_ramaswamy",
+            "order_id": "order_id",
             "security_id": "test"
         },
         "status": Accepted
@@ -96,8 +100,8 @@ This is an endpoint to delete existing orders. It takes the following `json` as 
 ```json 
 {
     "order_core": {
-        "username": "test1",
-        "order_id": "test2",
+        "username": "nihal_ramaswamy",
+        "order_id": "order_id",
         "security_id": "test"
     },
     "is_buy_side": true
@@ -107,8 +111,8 @@ It outputs the following response.
 ```json 
 {
     "order_core": {
-        "username": "test1",
-        "order_id": "test2",
+        "username": "nihal_ramaswamy",
+        "order_id": "order_id",
         "security_id": "test"
     },
     "status": Accepted
@@ -141,8 +145,8 @@ It outputs the following response.
                 {
                     "order": {
                         "order_core": {
-                            "username": "test1",
-                            "order_id": "test2",
+                            "username": "nihal_ramaswamy",
+                            "order_id": "order_id",
                             "security_id": "test"
                         },
                         "price": 10,

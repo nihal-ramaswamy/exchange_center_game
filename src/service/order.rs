@@ -1,3 +1,4 @@
+use crate::dto::status_codes::status::StatusCodes;
 use crate::dto::traits::book::Book;
 
 use crate::dto::{
@@ -19,18 +20,29 @@ pub struct OrderBookService<T: Book> {
 
 impl<T: Book> OrderBookService<T> {
     pub fn add_order(&mut self, order: OrderParser) -> Status {
+        if order.order_core.order_id.is_some() {
+            return Status::new_from_order_core_parser(order, StatusCodes::InvalidFields);
+        }
         let order = NewOrder::new_from_parser(order);
         info!("Adding order: {:?}", order);
         self.order_book.add_order(order)
     }
 
     pub fn cancel_order(&mut self, order: OrderParser) -> Status {
+        if order.order_core.order_id.is_none() {
+            return Status::new_from_order_core_parser(order, StatusCodes::InvalidFields);
+        }
+
         let order = CancelOrder::new_from_parser(order);
         info!("Canceling order: {:?}", order);
         self.order_book.cancel_order(order)
     }
 
     pub fn modify_order(&mut self, order: OrderParser) -> Vec<Status> {
+        if order.order_core.order_id.is_none() {
+            return vec![Status::new_from_order_core_parser(order, StatusCodes::InvalidFields)];
+        }
+
         let order = ModifyOrder::new_from_parser(order);
         info!("Modifying order: {:?}", order);
         self.order_book.modify_order(order)

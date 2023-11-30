@@ -7,5 +7,6 @@ pub enum StatusCodes {
     PriceMisMatch,
     SideMisMatch,
     OrderNotFound,
-    Accepted
+    Accepted,
+    InvalidFields
 }
